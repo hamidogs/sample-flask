@@ -19,6 +19,7 @@ def sendWhatsappMessage():
     )
 
     print(message.sid)
+sendWhatsappMessage()
 
 # DigitalOcean Spaces konfigürasyonu
 DO_SPACES_ACCESS_KEY = 'DO007MNNU87DAEDGHYM2'
