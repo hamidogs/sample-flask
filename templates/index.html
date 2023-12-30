@@ -77,15 +77,16 @@
         function validateForm() {
             var imagePreviews = document.getElementById('imagePreviews');
             var images = imagePreviews.getElementsByTagName('img');
-    
+
             // En az bir resim seçilmiş olmalı
             if (images.length === 0) {
                 alert('En az bir resim seçmelisiniz.');
                 return false;
             }
-    
+
             // Silinen resimler dışındaki resim isimlerini formdan çıkarılması
             var form = document.querySelector('form');
+            var input = document.querySelector('input[name="files"]');
             for (var i = 0; i < input.files.length; i++) {
                 var file = input.files[i];
                 if (!deletedImages.includes(file.name) && !uploadedImages.includes(file.name)) {
@@ -94,14 +95,15 @@
                     hiddenInput.name = 'uploadedImages[]';
                     hiddenInput.value = file.name;
                     form.appendChild(hiddenInput);
-    
+
                     // Yüklenen resimleri listeye ekle
                     uploadedImages.push(file.name);
                 }
             }
-    
+
             return true;
-        }
+}
+
     </script>
     
     
