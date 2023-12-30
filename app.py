@@ -66,5 +66,16 @@ def upload_file():
     else:
         return render_template('index.html', error='Desteklenmeyen dosya türü.')
 
+@app.route('/show_image')
+def show_image():
+    # URL'den dosya adını al
+    file_name = request.args.get('file_name', '')
+
+    # Dosyaya erişim URL'si oluştur
+    file_url = f'https://{DO_SPACES_BUCKET_NAME}.{DO_SPACES_REGION}.digitaloceanspaces.com/{file_name}'
+
+    return render_template('show_image.html', file_url=file_url)
+
+
 if __name__ == '__main__':
     app.run(debug=True)
