@@ -72,9 +72,33 @@ def show_image():
     file_name = request.args.get('file_name', '')
 
     # Dosyaya erişim URL'si oluştur
-    file_url = f'https://{DO_SPACES_BUCKET_NAME}.{DO_SPACES_REGION}.digitaloceanspaces.com/{file_name}'
+    file_url = get_presigned_url(DO_SPACES_BUCKET_NAME, file_name)
 
     return render_template('show_image.html', file_url=file_url)
+
+def get_presigned_url(bucket_name, object_key, expiration_time=3600):
+    """
+    Oluşturulan ön imzalı URL'i döndüren yardımcı fonksiyon.
+    :param bucket_name: Dosyanın bulunduğu bucket adı
+    :param object_key: Dosyanın anahtarı (isim)
+    :param expiration_time: Ön imzalı URL'in ne kadar süre geçerli olacağı (saniye cinsinden)
+    :return: Ön imzalı URL
+    """
+    try:
+        # Geçerlilik süresi ekleyerek ön imzalı URL oluştur
+        url = s3.generate_presigned_url(
+            'get_object',
+            Params={
+                'Bucket': bucket_name,
+                'Key': object_key
+            },
+            ExpiresIn=expiration_time
+        )
+        return url
+    except ClientError as e:
+        # Hata durumunda buraya düşer
+        print(f'Hata oluştu: {e}')
+        return None
 
 
 if __name__ == '__main__':
