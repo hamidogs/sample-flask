@@ -16,8 +16,8 @@
         <p style="color: red;">{{ error }}</p>
     {% endif %}
 
-    <form action="/upload" method="post" enctype="multipart/form-data">
-        <input type="file" name="file" accept=".jpg, .jpeg, .png, .gif" required>
+    <form action="/upload" method="post" enctype="multipart/form-data" onsubmit="return validateForm()">
+        <input type="file" name="file" accept=".jpg, .jpeg, .png, .gif" required onchange="previewImage(this)">
         <button type="submit">Yükle</button>
     </form>
 
