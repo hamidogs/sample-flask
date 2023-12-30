@@ -21,6 +21,32 @@
         <button type="submit">Yükle</button>
     </form>
 
+        <!-- Resim önizleme için boş bir img etiketi -->
+    <img id="imagePreview" src="#" alt="Resim önizleme" style="display: none; max-width: 300px; max-height: 300px;">
+
+    <script>
+        function previewImage(input) {
+            var preview = document.getElementById('imagePreview');
+            var file = input.files[0];
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                preview.src = e.target.result;
+                preview.style.display = 'block';
+            }
+
+            if (file) {
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function validateForm() {
+            // Burada istediğiniz doğrulama mantığını ekleyebilirsiniz.
+            // Örneğin, dosyanın tipini kontrol etmek veya boyut sınırlamak.
+            return true; // veya false
+        }
+    </script>
+
     <a href="show_image?file_name=fgfg.jpeg">resimi goster</a>
 </body>
 </html>
