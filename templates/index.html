@@ -26,6 +26,7 @@
     <div id="imagePreviews" style="display: flex; flex-wrap: wrap;"></div>
     
     <script>
+        var uploadedImages = [];
         var deletedImages = [];
     
         function previewImages(input) {
@@ -83,19 +84,23 @@
                 return false;
             }
     
-            // Silinen resimlerin formdan çıkarılması
+            // Silinen resimler dışındaki resim isimlerini formdan çıkarılması
             var form = document.querySelector('form');
-            deletedImages.forEach(function (deletedImage) {
-                var input = document.createElement('input');
-                input.type = 'hidden';
-                input.name = 'deletedImages[]';
-                input.value = deletedImage;
-                form.appendChild(input);
-            });
+            for (var i = 0; i < input.files.length; i++) {
+                var file = input.files[i];
+                if (!deletedImages.includes(file.name)) {
+                    var input = document.createElement('input');
+                    input.type = 'hidden';
+                    input.name = 'uploadedImages[]';
+                    input.value = file.name;
+                    form.appendChild(input);
+                }
+            }
     
             return true;
         }
     </script>
+    
     
     
     
