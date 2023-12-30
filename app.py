@@ -3,8 +3,24 @@ import boto3
 from werkzeug.utils import secure_filename
 import os
 from datetime import datetime
+from twilio.rest import Client
 
 app = Flask(__name__)
+
+
+
+
+account_sid = 'AC4767a6e3fb1381b1112126b1ae132172'
+auth_token = 'f93beb243100ba4ba972646bfb7b8009'
+client = Client(account_sid, auth_token)
+
+message = client.messages.create(
+    from_='whatsapp:+14155238886',
+    body='Dosyalar Yüklendi',
+    to='whatsapp:+306975662416'
+)
+
+print(message.sid)
 
 # DigitalOcean Spaces konfigürasyonu
 DO_SPACES_ACCESS_KEY = 'DO007MNNU87DAEDGHYM2'
@@ -68,23 +84,8 @@ def upload_files():
             file.seek(0)
             s3.upload_fileobj(file, DO_SPACES_BUCKET_NAME, filename_with_timestamp)
 
-    sendWhatsappMessage()
+    
     return jsonify({'success': 'Dosyalar başarıyla yüklendi.'})
-
-from twilio.rest import Client
-
-def sendWhatsappMessage():
-    account_sid = 'AC4767a6e3fb1381b1112126b1ae132172'
-    auth_token = 'f93beb243100ba4ba972646bfb7b8009'
-    client = Client(account_sid, auth_token)
-
-    message = client.messages.create(
-    from_='whatsapp:+14155238886',
-    body='Dosyalar Yüklendi',
-    to='whatsapp:+306975662416'
-    )
-
-    print(message.sid)
 
 
 
