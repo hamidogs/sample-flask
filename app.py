@@ -13,13 +13,12 @@ auth_token = 'ad5f76272cab162bc9578d82b20cd6cd'
 client = Client(account_sid, auth_token)
 
 message = client.messages.create(
-    from_='whatsapp:+16154120609',
-    body='Dosyalar Yüklendic',
+    from_='whatsapp:+14155238886',
+    body='Dosyalar Yüklendi',
     to='whatsapp:+306975662416'
 )
 
 print(message.sid)
-
 
 # DigitalOcean Spaces konfigürasyonu
 DO_SPACES_ACCESS_KEY = 'DO007MNNU87DAEDGHYM2'
