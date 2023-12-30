@@ -85,17 +85,18 @@
     
             // Silinen resimlerin formdan çıkarılması
             var form = document.querySelector('form');
-            for (var i = 0; i < deletedImages.length; i++) {
+            deletedImages.forEach(function (deletedImage) {
                 var input = document.createElement('input');
                 input.type = 'hidden';
                 input.name = 'deletedImages[]';
-                input.value = deletedImages[i];
+                input.value = deletedImage;
                 form.appendChild(input);
-            }
+            });
     
             return true;
         }
     </script>
+    
     
     
     
