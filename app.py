@@ -34,37 +34,36 @@ def allowed_file(filename):
 def index():
     return render_template('index.html')
 
+
 @app.route('/upload', methods=['POST'])
-def upload_file():
+def upload_files():
     # Dosya kontrolü
-    if 'file' not in request.files:
+    if 'files' not in request.files:
         return render_template('index.html', error='Dosya seçilmedi.')
 
-    file = request.files['file']
+    files = request.files.getlist('files')
 
-    if file.filename == '':
-        return render_template('index.html', error='Dosya adı boş olamaz.')
+    for file in files:
+        if file.filename == '':
+            return render_template('index.html', error='Dosya adı boş olamaz.')
 
-    if file and allowed_file(file.filename):
-        # Zaman damgası oluştur
-        timestamp = datetime.now().strftime('%Y%m%d%H%M%S')
+        if file and allowed_file(file.filename):
+            # Zaman damgası oluştur
+            timestamp = datetime.now().strftime('%Y%m%d%H%M%S')
 
-        filename = secure_filename(file.filename)
-        # Dosya adına zaman damgasını ekle
-        filename_with_timestamp = f"{os.path.splitext(filename)[0]}_{timestamp}{os.path.splitext(filename)[1]}"
+            filename = secure_filename(file.filename)
+            # Dosya adına zaman damgasını ekle
+            filename_with_timestamp = f"{os.path.splitext(filename)[0]}_{timestamp}{os.path.splitext(filename)[1]}"
 
-        # Dosya boyut kontrolü
-        if len(file.read()) > MAX_CONTENT_LENGTH:
-            return render_template('index.html', error='Dosya boyutu çok büyük.')
+            # Dosya boyut kontrolü
+            if len(file.read()) > MAX_CONTENT_LENGTH:
+                return render_template('index.html', error='Dosya boyutu çok büyük.')
 
-        # DigitalOcean Spaces'e dosyayı yükle
-        file.seek(0)
-        s3.upload_fileobj(file, DO_SPACES_BUCKET_NAME, filename_with_timestamp)
+            # DigitalOcean Spaces'e dosyayı yükle
+            file.seek(0)
+            s3.upload_fileobj(file, DO_SPACES_BUCKET_NAME, filename_with_timestamp)
 
-        return render_template('index.html', success='Dosya başarıyla yüklendi.')
-
-    else:
-        return render_template('index.html', error='Desteklenmeyen dosya türü.')
+    return render_template('index.html', success='Dosyalar başarıyla yüklendi.')
 
 @app.route('/show_image')
 def show_image():
