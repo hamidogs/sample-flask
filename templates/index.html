@@ -20,87 +20,106 @@
 
 
 
-<form id="uploadForm" enctype="multipart/form-data">
-    <!-- multiple özelliği ile birden fazla dosya seçimi -->
-    <input type="file" name="files" accept=".jpg, .jpeg, .png, .gif" required multiple onchange="previewImages(this)">
-    <button type="button" onclick="submitForm()">Yükle</button>
-</form>
-
-<!-- Resim önizleme için boş bir div -->
-<div id="imagePreviews" style="display: flex; flex-wrap: wrap;"></div>
-
-<script>
-    var uploadedImages = [];
-
-    function previewImages(input) {
-        var previewContainer = document.getElementById('imagePreviews');
-        previewContainer.innerHTML = '';
-
-        for (var i = 0; i < input.files.length; i++) {
-            var file = input.files[i];
-            var reader = new FileReader();
-
-            reader.onload = (function (file) {
-                return function (e) {
-                    var imgContainer = document.createElement('div');
-                    imgContainer.style.position = 'relative';
-
-                    var img = document.createElement('img');
-                    img.src = e.target.result;
-                    img.style.maxWidth = '100px';
-                    img.style.maxHeight = '100px';
-                    imgContainer.appendChild(img);
-
-                    // Silme butonu ekle
-                    var deleteButton = document.createElement('button');
-                    deleteButton.innerHTML = 'Sil';
-                    deleteButton.style.marginTop = '5px';
-                    deleteButton.style.cursor = 'pointer';
-                    deleteButton.onclick = function() {
-                        imgContainer.remove();
-                        // Yüklenen resmi listeden çıkar
-                        uploadedImages = uploadedImages.filter(function(item) {
-                            return item !== file;
+    <form id="uploadForm" enctype="multipart/form-data">
+        <!-- multiple özelliği ile birden fazla dosya seçimi -->
+        <input type="file" name="files" accept=".jpg, .jpeg, .png, .gif" required multiple onchange="previewImages(this)">
+        <button type="button" onclick="submitForm()">Yükle</button>
+    </form>
+    
+    <!-- Resim önizleme için boş bir div -->
+    <div id="imagePreviews" style="display: flex; flex-wrap: wrap;"></div>
+    
+    <script>
+        var uploadedImages = [];
+    
+        function previewImages(input) {
+            var previewContainer = document.getElementById('imagePreviews');
+            previewContainer.innerHTML = '';
+    
+            for (var i = 0; i < input.files.length; i++) {
+                var file = input.files[i];
+                var reader = new FileReader();
+    
+                reader.onload = (function (file) {
+                    return function (e) {
+                        var imgContainer = document.createElement('div');
+                        imgContainer.style.position = 'relative';
+    
+                        var img = document.createElement('img');
+                        img.src = e.target.result;
+                        img.style.maxWidth = '100px';
+                        img.style.maxHeight = '100px';
+                        imgContainer.appendChild(img);
+    
+                        // Silme butonu ekle
+                        var deleteButton = document.createElement('button');
+                        deleteButton.innerHTML = 'Sil';
+                        deleteButton.style.position = 'absolute';
+                        deleteButton.style.top = '0';
+                        deleteButton.style.right = '0';
+                        deleteButton.style.backgroundColor = 'transparent';
+                        deleteButton.style.border = 'none';
+                        deleteButton.style.color = 'red';
+                        deleteButton.style.cursor = 'pointer';
+                        deleteButton.style.opacity = '0.7';
+                        deleteButton.style.transition = 'opacity 0.3s';
+    
+                        // Silme butonuna fare geldiğinde opaklığını artır
+                        deleteButton.addEventListener('mouseover', function() {
+                            deleteButton.style.opacity = '1';
                         });
+    
+                        // Silme butonundan fare ayrıldığında opaklığını düşür
+                        deleteButton.addEventListener('mouseout', function() {
+                            deleteButton.style.opacity = '0.7';
+                        });
+    
+                        deleteButton.onclick = function() {
+                            imgContainer.remove();
+                            // Yüklenen resmi listeden çıkar
+                            uploadedImages = uploadedImages.filter(function(item) {
+                                return item !== file;
+                            });
+                        };
+    
+                        imgContainer.appendChild(deleteButton);
+                        previewContainer.appendChild(imgContainer);
+    
+                        // Yüklenen resimleri listeye ekle
+                        uploadedImages.push(file);
                     };
-
-                    imgContainer.appendChild(deleteButton);
-                    previewContainer.appendChild(imgContainer);
-
-                    // Yüklenen resimleri listeye ekle
-                    uploadedImages.push(file);
-                };
-            })(file);
-
-            if (file) {
-                reader.readAsDataURL(file);
+                })(file);
+    
+                if (file) {
+                    reader.readAsDataURL(file);
+                }
             }
         }
-    }
-
-    function submitForm() {
-        var formData = new FormData();
-        for (var i = 0; i < uploadedImages.length; i++) {
-            formData.append('files', uploadedImages[i]);
-        }
-
-        $.ajax({
-            url: '/upload',
-            type: 'POST',
-            data: formData,
-            contentType: false,
-            processData: false,
-            success: function(response) {
-                console.log(response);
-                // Başarı durumunu işleyebilirsiniz, örneğin bir mesaj gösterebilirsiniz.
-            },
-            error: function(error) {
-                console.error(error);
-                // Hata durumunu işleyebilirsiniz, örneğin bir hata mesajı gösterebilirsiniz.
+    
+        function submitForm() {
+            var formData = new FormData();
+            for (var i = 0; i < uploadedImages.length; i++) {
+                formData.append('files', uploadedImages[i]);
             }
-        });
-    }
-</script>
+    
+            $.ajax({
+                url: '/upload',
+                type: 'POST',
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function(response) {
+                    console.log(response);
+                    // Başarı durumunu işleyebilirsiniz, örneğin bir mesaj gösterebilirsiniz.
+                },
+                error: function(error) {
+                    console.error(error);
+                    // Hata durumunu işleyebilirsiniz, örneğin bir hata mesajı gösterebilirsiniz.
+                }
+            });
+        }
+    </script>
+    
 
     
     
