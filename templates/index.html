@@ -26,11 +26,14 @@
     <div id="imagePreviews" style="display: flex; flex-wrap: wrap;"></div>
     
     <script>
-        var deletedImages = [];
+        var uploadedImages = [];
     
         function previewImages(input) {
             var previewContainer = document.getElementById('imagePreviews');
             previewContainer.innerHTML = '';
+    
+            // Yüklenen resimleri listeye ekle
+            uploadedImages = [];
     
             for (var i = 0; i < input.files.length; i++) {
                 var file = input.files[i];
@@ -47,23 +50,10 @@
                         img.style.maxHeight = '100px';
                         imgContainer.appendChild(img);
     
-                        var closeButton = document.createElement('button');
-                        closeButton.innerHTML = 'x';
-                        closeButton.style.position = 'absolute';
-                        closeButton.style.top = '0';
-                        closeButton.style.right = '0';
-                        closeButton.style.padding = '4px';
-                        closeButton.style.background = 'transparent';
-                        closeButton.style.border = 'none';
-                        closeButton.style.cursor = 'pointer';
-                        closeButton.onclick = function() {
-                            imgContainer.remove();
-                            // Silinen resmi listeye ekle
-                            deletedImages.push(file.name);
-                        };
-    
-                        imgContainer.appendChild(closeButton);
                         previewContainer.appendChild(imgContainer);
+    
+                        // Yüklenen resimleri listeye ekle
+                        uploadedImages.push(file);
                     };
                 })(file);
     
@@ -74,40 +64,23 @@
         }
     
         function validateForm() {
-            var imagePreviews = document.getElementById('imagePreviews');
-            var images = imagePreviews.getElementsByTagName('img');
-    
-            // En az bir resim seçilmiş olmalı
-            if (images.length === 0) {
-                alert('En az bir resim seçmelisiniz.');
-                return false;
-            }
-    
-            // Silinen resimler dışındaki resim isimlerini formdan çıkarılması
             var form = document.querySelector('form');
-            var input = document.querySelector('input[name="files"]');
-            
-            // Tüm önceki yüklenmiş resimleri formdan kaldır
-            var existingInputs = form.querySelectorAll('input[name="uploadedImages[]"]');
-            for (var i = 0; i < existingInputs.length; i++) {
-                existingInputs[i].remove();
-            }
     
-            // Yüklenen ve silinmeyen resimleri form'a ekle
-            for (var i = 0; i < input.files.length; i++) {
-                var file = input.files[i];
-                if (!deletedImages.includes(file.name)) {
-                    var hiddenInput = document.createElement('input');
-                    hiddenInput.type = 'hidden';
-                    hiddenInput.name = 'uploadedImages[]';
-                    hiddenInput.value = file.name;
-                    form.appendChild(hiddenInput);
-                }
+            // Yüklenen resimleri form'a ekleyin
+            for (var i = 0; i < uploadedImages.length; i++) {
+                var file = uploadedImages[i];
+    
+                var hiddenInput = document.createElement('input');
+                hiddenInput.type = 'hidden';
+                hiddenInput.name = 'uploadedImages[]';
+                hiddenInput.value = file.name;
+                form.appendChild(hiddenInput);
             }
     
             return true;
         }
     </script>
+    
     
     
     
