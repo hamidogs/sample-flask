@@ -14,7 +14,7 @@ def sendWhatsappMessage():
 
     message = client.messages.create(
         from_='whatsapp:+14155238886',
-        body='Dosyalar Yüklendi',
+        body='Dosyalar Yüklendic',
         to='whatsapp:+306975662416'
     )
 
