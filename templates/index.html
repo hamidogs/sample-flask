@@ -17,41 +17,29 @@
     {% endif %}
 
     <form action="/upload" method="post" enctype="multipart/form-data" onsubmit="return validateForm()">
-        <!-- 5 farklı resim ekleme butonu -->
-        <input type="file" name="file1" accept=".jpg, .jpeg, .png, .gif" required onchange="previewImage(this, 'imagePreview1')">
-        <img id="imagePreview1" src="#" alt="Resim önizleme" style="display: none; max-width: 100px; max-height: 100px;">
-    
-        <input type="file" name="file2" accept=".jpg, .jpeg, .png, .gif" required onchange="previewImage(this, 'imagePreview2')">
-        <img id="imagePreview2" src="#" alt="Resim önizleme" style="display: none; max-width: 100px; max-height: 100px;">
-    
-        <input type="file" name="file3" accept=".jpg, .jpeg, .png, .gif" required onchange="previewImage(this, 'imagePreview3')">
-        <img id="imagePreview3" src="#" alt="Resim önizleme" style="display: none; max-width: 100px; max-height: 100px;">
-    
-        <input type="file" name="file4" accept=".jpg, .jpeg, .png, .gif" required onchange="previewImage(this, 'imagePreview4')">
-        <img id="imagePreview4" src="#" alt="Resim önizleme" style="display: none; max-width: 100px; max-height: 100px;">
-    
-        <input type="file" name="file5" accept=".jpg, .jpeg, .png, .gif" required onchange="previewImage(this, 'imagePreview5')">
-        <img id="imagePreview5" src="#" alt="Resim önizleme" style="display: none; max-width: 100px; max-height: 100px;">
-    
+        <input type="file" name="file" accept=".jpg, .jpeg, .png, .gif" required onchange="previewImage(this)">
         <button type="submit">Yükle</button>
     </form>
-    
+
+        <!-- Resim önizleme için boş bir img etiketi -->
+    <img id="imagePreview" src="#" alt="Resim önizleme" style="display: none; max-width: 100px; max-height: 100px;">
+
     <script>
-        function previewImage(input, previewId) {
-            var preview = document.getElementById(previewId);
+        function previewImage(input) {
+            var preview = document.getElementById('imagePreview');
             var file = input.files[0];
             var reader = new FileReader();
-    
+
             reader.onload = function (e) {
                 preview.src = e.target.result;
                 preview.style.display = 'block';
             }
-    
+
             if (file) {
                 reader.readAsDataURL(file);
             }
         }
-    
+
         function validateForm() {
             // Burada istediğiniz doğrulama mantığını ekleyebilirsiniz.
             // Örneğin, dosyanın tipini kontrol etmek veya boyut sınırlamak.
