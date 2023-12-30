@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template
+from flask import Flask, render_template, request, jsonify
 import boto3
 from werkzeug.utils import secure_filename
 import os
@@ -35,20 +35,18 @@ def index():
     return render_template('index.html')
 
 
-from flask import request
-
 @app.route('/upload', methods=['POST'])
 def upload_files():
     kullanici_telefon_no = 5554443322
     # Dosya kontrolü
     if 'files' not in request.files:
-        return render_template('index.html', error='Dosya seçilmedi.')
+        return jsonify({'error': 'Dosya seçilmedi.'})
 
     files = request.files.getlist('files')
 
     for file in files:
         if file.filename == '':
-            return render_template('index.html', error='Dosya adı boş olamaz.')
+            return jsonify({'error': 'Dosya adı boş olamaz.'})
 
         if file and allowed_file(file.filename):
             # Zaman damgası oluştur
@@ -62,14 +60,15 @@ def upload_files():
             filename_with_timestamp = f"{today_folder}/{user_folder}/{timestamp}_{secure_filename(file.filename)}"
 
             # Dosya boyut kontrolü
+            file.seek(0)
             if len(file.read()) > MAX_CONTENT_LENGTH:
-                return render_template('index.html', error='Dosya boyutu çok büyük.')
+                return jsonify({'error': 'Dosya boyutu çok büyük.'})
 
             # Dosyayı DigitalOcean Spaces'e yükle
             file.seek(0)
             s3.upload_fileobj(file, DO_SPACES_BUCKET_NAME, filename_with_timestamp)
 
-    return render_template('index.html', success='Dosyalar başarıyla yüklendi.')
+    return jsonify({'success': 'Dosyalar başarıyla yüklendi.'})
 
 
 @app.route('/show_image')
