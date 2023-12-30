@@ -3,6 +3,8 @@ import boto3
 from werkzeug.utils import secure_filename
 import os
 from datetime import datetime
+from botocore.client import Config
+from flask_uploads import UploadSet, configure_uploads, IMAGES
 
 app = Flask(__name__)
 
@@ -23,6 +25,7 @@ s3 = boto3.client('s3',
 UPLOAD_FOLDER = 'uploads'
 ALLOWED_EXTENSIONS = {'jpg', 'jpeg', 'png', 'gif'}
 MAX_CONTENT_LENGTH = 50 * 1024 * 1024  # Maksimum dosya boyutu: 50 MB
+configure_uploads(app, photos)
 
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['MAX_CONTENT_LENGTH'] = MAX_CONTENT_LENGTH
