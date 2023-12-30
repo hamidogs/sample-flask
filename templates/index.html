@@ -26,6 +26,8 @@
     <div id="imagePreviews" style="display: flex; flex-wrap: wrap;"></div>
     
     <script>
+        var deletedImages = [];
+    
         function previewImages(input) {
             var previewContainer = document.getElementById('imagePreviews');
             previewContainer.innerHTML = '';
@@ -55,6 +57,8 @@
                     closeButton.style.cursor = 'pointer';
                     closeButton.onclick = function() {
                         imgContainer.remove();
+                        // Silinen resmi listeye ekle
+                        deletedImages.push(file.name);
                     };
     
                     imgContainer.appendChild(closeButton);
@@ -77,12 +81,20 @@
                 return false;
             }
     
-            // Burada istediğiniz diğer doğrulama mantığını ekleyebilirsiniz.
-            // Örneğin, dosyanın tipini kontrol etmek veya boyut sınırlamak.
+            // Silinen resimlerin formdan çıkarılması
+            var form = document.querySelector('form');
+            for (var i = 0; i < deletedImages.length; i++) {
+                var input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = 'deletedImages[]';
+                input.value = deletedImages[i];
+                form.appendChild(input);
+            }
     
             return true;
         }
     </script>
+    
     
     
 
