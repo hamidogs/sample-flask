@@ -50,6 +50,20 @@
                         img.style.maxHeight = '100px';
                         imgContainer.appendChild(img);
     
+                        // Silme butonu ekle
+                        var deleteButton = document.createElement('button');
+                        deleteButton.innerHTML = 'Sil';
+                        deleteButton.style.marginTop = '5px';
+                        deleteButton.style.cursor = 'pointer';
+                        deleteButton.onclick = function() {
+                            imgContainer.remove();
+                            // Yüklenen resmi listeden çıkar
+                            uploadedImages = uploadedImages.filter(function(item) {
+                                return item !== file;
+                            });
+                        };
+    
+                        imgContainer.appendChild(deleteButton);
                         previewContainer.appendChild(imgContainer);
     
                         // Yüklenen resimleri listeye ekle
@@ -80,8 +94,6 @@
             return true;
         }
     </script>
-    
-    
     
     
     
