@@ -26,7 +26,6 @@
     <div id="imagePreviews" style="display: flex; flex-wrap: wrap;"></div>
     
     <script>
-        var uploadedImages = [];
         var deletedImages = [];
     
         function previewImages(input) {
@@ -77,34 +76,39 @@
         function validateForm() {
             var imagePreviews = document.getElementById('imagePreviews');
             var images = imagePreviews.getElementsByTagName('img');
-
+    
             // En az bir resim seçilmiş olmalı
             if (images.length === 0) {
                 alert('En az bir resim seçmelisiniz.');
                 return false;
             }
-
+    
             // Silinen resimler dışındaki resim isimlerini formdan çıkarılması
             var form = document.querySelector('form');
             var input = document.querySelector('input[name="files"]');
+            
+            // Tüm önceki yüklenmiş resimleri formdan kaldır
+            var existingInputs = form.querySelectorAll('input[name="uploadedImages[]"]');
+            for (var i = 0; i < existingInputs.length; i++) {
+                existingInputs[i].remove();
+            }
+    
+            // Yüklenen ve silinmeyen resimleri form'a ekle
             for (var i = 0; i < input.files.length; i++) {
                 var file = input.files[i];
-                if (!deletedImages.includes(file.name) && !uploadedImages.includes(file.name)) {
+                if (!deletedImages.includes(file.name)) {
                     var hiddenInput = document.createElement('input');
                     hiddenInput.type = 'hidden';
                     hiddenInput.name = 'uploadedImages[]';
                     hiddenInput.value = file.name;
                     form.appendChild(hiddenInput);
-
-                    // Yüklenen resimleri listeye ekle
-                    uploadedImages.push(file.name);
                 }
             }
-
+    
             return true;
-}
-
+        }
     </script>
+    
     
     
     
