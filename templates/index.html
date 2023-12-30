@@ -68,11 +68,22 @@
         }
     
         function validateForm() {
-            // Burada istediğiniz doğrulama mantığını ekleyebilirsiniz.
+            var imagePreviews = document.getElementById('imagePreviews');
+            var images = imagePreviews.getElementsByTagName('img');
+    
+            // En az bir resim seçilmiş olmalı
+            if (images.length === 0) {
+                alert('En az bir resim seçmelisiniz.');
+                return false;
+            }
+    
+            // Burada istediğiniz diğer doğrulama mantığını ekleyebilirsiniz.
             // Örneğin, dosyanın tipini kontrol etmek veya boyut sınırlamak.
-            return true; // veya false
+    
+            return true;
         }
     </script>
+    
     
 
     <a href="show_image?file_name=fgfg.jpeg">resimi goster</a>
