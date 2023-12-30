@@ -35,8 +35,11 @@ def index():
     return render_template('index.html')
 
 
+from flask import request
+
 @app.route('/upload', methods=['POST'])
 def upload_files():
+    kullanici_telefon_no = 5554443322
     # Dosya kontrolü
     if 'files' not in request.files:
         return render_template('index.html', error='Dosya seçilmedi.')
@@ -51,19 +54,23 @@ def upload_files():
             # Zaman damgası oluştur
             timestamp = datetime.now().strftime('%Y%m%d%H%M%S')
 
-            filename = secure_filename(file.filename)
-            # Dosya adına zaman damgasını ekle
-            filename_with_timestamp = f"{os.path.splitext(filename)[0]}_{timestamp}{os.path.splitext(filename)[1]}"
+            # Klasör yapısı oluştur
+            today_folder = datetime.now().strftime('%Y%m%d')
+            user_folder = f"{kullanici_telefon_no}"
+
+            # Dosya adına zaman damgasını ve klasör yapısını ekle
+            filename_with_timestamp = f"{today_folder}/{user_folder}/{timestamp}_{secure_filename(file.filename)}"
 
             # Dosya boyut kontrolü
             if len(file.read()) > MAX_CONTENT_LENGTH:
                 return render_template('index.html', error='Dosya boyutu çok büyük.')
 
-            # DigitalOcean Spaces'e dosyayı yükle
+            # Dosyayı DigitalOcean Spaces'e yükle
             file.seek(0)
             s3.upload_fileobj(file, DO_SPACES_BUCKET_NAME, filename_with_timestamp)
 
     return render_template('index.html', success='Dosyalar başarıyla yüklendi.')
+
 
 @app.route('/show_image')
 def show_image():
