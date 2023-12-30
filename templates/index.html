@@ -36,34 +36,36 @@
                 var file = input.files[i];
                 var reader = new FileReader();
     
-                reader.onload = function (e) {
-                    var imgContainer = document.createElement('div');
-                    imgContainer.style.position = 'relative';
+                reader.onload = (function (file) {
+                    return function (e) {
+                        var imgContainer = document.createElement('div');
+                        imgContainer.style.position = 'relative';
     
-                    var img = document.createElement('img');
-                    img.src = e.target.result;
-                    img.style.maxWidth = '100px';
-                    img.style.maxHeight = '100px';
-                    imgContainer.appendChild(img);
+                        var img = document.createElement('img');
+                        img.src = e.target.result;
+                        img.style.maxWidth = '100px';
+                        img.style.maxHeight = '100px';
+                        imgContainer.appendChild(img);
     
-                    var closeButton = document.createElement('button');
-                    closeButton.innerHTML = 'x';
-                    closeButton.style.position = 'absolute';
-                    closeButton.style.top = '0';
-                    closeButton.style.right = '0';
-                    closeButton.style.padding = '4px';
-                    closeButton.style.background = 'transparent';
-                    closeButton.style.border = 'none';
-                    closeButton.style.cursor = 'pointer';
-                    closeButton.onclick = function() {
-                        imgContainer.remove();
-                        // Silinen resmi listeye ekle
-                        deletedImages.push(file.name);
+                        var closeButton = document.createElement('button');
+                        closeButton.innerHTML = 'x';
+                        closeButton.style.position = 'absolute';
+                        closeButton.style.top = '0';
+                        closeButton.style.right = '0';
+                        closeButton.style.padding = '4px';
+                        closeButton.style.background = 'transparent';
+                        closeButton.style.border = 'none';
+                        closeButton.style.cursor = 'pointer';
+                        closeButton.onclick = function() {
+                            imgContainer.remove();
+                            // Silinen resmi listeye ekle
+                            deletedImages.push(file.name);
+                        };
+    
+                        imgContainer.appendChild(closeButton);
+                        previewContainer.appendChild(imgContainer);
                     };
-    
-                    imgContainer.appendChild(closeButton);
-                    previewContainer.appendChild(imgContainer);
-                };
+                })(file);
     
                 if (file) {
                     reader.readAsDataURL(file);
@@ -94,6 +96,7 @@
             return true;
         }
     </script>
+    
     
     
     
