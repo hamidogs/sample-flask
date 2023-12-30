@@ -32,9 +32,6 @@
             var previewContainer = document.getElementById('imagePreviews');
             previewContainer.innerHTML = '';
     
-            // Yüklenen resimleri listeye ekle
-            uploadedImages = [];
-    
             for (var i = 0; i < input.files.length; i++) {
                 var file = input.files[i];
                 var reader = new FileReader();
@@ -84,16 +81,20 @@
             for (var i = 0; i < uploadedImages.length; i++) {
                 var file = uploadedImages[i];
     
-                var hiddenInput = document.createElement('input');
-                hiddenInput.type = 'hidden';
-                hiddenInput.name = 'uploadedImages[]';
-                hiddenInput.value = file.name;
-                form.appendChild(hiddenInput);
+                // Silinen resimleri formdan çıkar
+                if (!file._deleted) {
+                    var hiddenInput = document.createElement('input');
+                    hiddenInput.type = 'hidden';
+                    hiddenInput.name = 'uploadedImages[]';
+                    hiddenInput.value = file.name;
+                    form.appendChild(hiddenInput);
+                }
             }
     
             return true;
         }
     </script>
+    
     
     
     
