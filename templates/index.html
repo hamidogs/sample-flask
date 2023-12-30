@@ -22,7 +22,7 @@
         <button type="submit">Yükle</button>
     </form>
     
-    <!-- Resim önizleme için boş bir img etiketi -->
+    <!-- Resim önizleme için boş bir div -->
     <div id="imagePreviews" style="display: flex; flex-wrap: wrap;"></div>
     
     <script>
@@ -35,11 +35,30 @@
                 var reader = new FileReader();
     
                 reader.onload = function (e) {
+                    var imgContainer = document.createElement('div');
+                    imgContainer.style.position = 'relative';
+    
                     var img = document.createElement('img');
                     img.src = e.target.result;
                     img.style.maxWidth = '100px';
                     img.style.maxHeight = '100px';
-                    previewContainer.appendChild(img);
+                    imgContainer.appendChild(img);
+    
+                    var closeButton = document.createElement('button');
+                    closeButton.innerHTML = 'x';
+                    closeButton.style.position = 'absolute';
+                    closeButton.style.top = '0';
+                    closeButton.style.right = '0';
+                    closeButton.style.padding = '4px';
+                    closeButton.style.background = 'transparent';
+                    closeButton.style.border = 'none';
+                    closeButton.style.cursor = 'pointer';
+                    closeButton.onclick = function() {
+                        imgContainer.remove();
+                    };
+    
+                    imgContainer.appendChild(closeButton);
+                    previewContainer.appendChild(imgContainer);
                 };
     
                 if (file) {
@@ -54,6 +73,7 @@
             return true; // veya false
         }
     </script>
+    
 
     <a href="show_image?file_name=fgfg.jpeg">resimi goster</a>
 </body>
