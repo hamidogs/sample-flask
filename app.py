@@ -13,7 +13,7 @@ def sendWhatsappMessage():
     client = Client(account_sid, auth_token)
 
     message = client.messages.create(
-        from_='whatsapp:+14155238886',
+        from_='whatsapp:+16154120609',
         body='Dosyalar Yüklendic',
         to='whatsapp:+306975662416'
     )
