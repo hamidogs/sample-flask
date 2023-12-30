@@ -7,19 +7,19 @@ from twilio.rest import Client
 
 app = Flask(__name__)
 
-def sendWhatsappMessage():
-    account_sid = 'AC4767a6e3fb1381b1112126b1ae132172'
-    auth_token = 'ad5f76272cab162bc9578d82b20cd6cd'
-    client = Client(account_sid, auth_token)
 
-    message = client.messages.create(
-        from_='whatsapp:+16154120609',
-        body='Dosyalar Yüklendic',
-        to='whatsapp:+306975662416'
-    )
+account_sid = 'AC4767a6e3fb1381b1112126b1ae132172'
+auth_token = 'ad5f76272cab162bc9578d82b20cd6cd'
+client = Client(account_sid, auth_token)
 
-    print(message.sid)
-sendWhatsappMessage()
+message = client.messages.create(
+    from_='whatsapp:+16154120609',
+    body='Dosyalar Yüklendic',
+    to='whatsapp:+306975662416'
+)
+
+print(message.sid)
+
 
 # DigitalOcean Spaces konfigürasyonu
 DO_SPACES_ACCESS_KEY = 'DO007MNNU87DAEDGHYM2'
