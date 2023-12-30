@@ -2,6 +2,7 @@ from flask import Flask, request, render_template
 import boto3
 from werkzeug.utils import secure_filename
 import os
+from datetime import datetime
 
 app = Flask(__name__)
 
@@ -10,6 +11,7 @@ DO_SPACES_ACCESS_KEY = 'DO007MNNU87DAEDGHYM2'
 DO_SPACES_SECRET_KEY = 'MM1BquBArjjYY4+aN2jOvzK3E2NtaN7eMNEDJhhQjTc'
 DO_SPACES_BUCKET_NAME = 'oto'
 DO_SPACES_REGION = 'fra1'
+
 
 # Boto3 ile DigitalOcean Spaces'e bağlanma
 s3 = boto3.client('s3',
@@ -44,7 +46,12 @@ def upload_file():
         return render_template('index.html', error='Dosya adı boş olamaz.')
 
     if file and allowed_file(file.filename):
+        # Zaman damgası oluştur
+        timestamp = datetime.now().strftime('%Y%m%d%H%M%S')
+
         filename = secure_filename(file.filename)
+        # Dosya adına zaman damgasını ekle
+        filename_with_timestamp = f"{os.path.splitext(filename)[0]}_{timestamp}{os.path.splitext(filename)[1]}"
 
         # Dosya boyut kontrolü
         if len(file.read()) > MAX_CONTENT_LENGTH:
@@ -52,7 +59,7 @@ def upload_file():
 
         # DigitalOcean Spaces'e dosyayı yükle
         file.seek(0)
-        s3.upload_fileobj(file, DO_SPACES_BUCKET_NAME, filename)
+        s3.upload_fileobj(file, DO_SPACES_BUCKET_NAME, filename_with_timestamp)
 
         return render_template('index.html', success='Dosya başarıyla yüklendi.')
 
