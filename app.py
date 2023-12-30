@@ -9,19 +9,6 @@ app = Flask(__name__)
 
 
 
-
-account_sid = 'AC4767a6e3fb1381b1112126b1ae132172'
-auth_token = 'f93beb243100ba4ba972646bfb7b8009'
-client = Client(account_sid, auth_token)
-
-message = client.messages.create(
-    from_='whatsapp:+14155238886',
-    body='Dosyalar Yüklendi',
-    to='whatsapp:+306975662416'
-)
-
-print(message.sid)
-
 # DigitalOcean Spaces konfigürasyonu
 DO_SPACES_ACCESS_KEY = 'DO007MNNU87DAEDGHYM2'
 DO_SPACES_SECRET_KEY = 'MM1BquBArjjYY4+aN2jOvzK3E2NtaN7eMNEDJhhQjTc'
