@@ -101,5 +101,33 @@ def get_presigned_url(bucket_name, object_key, expiration_time=3600):
         return None
 
 
+@app.route('/upload2', methods=['POST'])
+def upload_file():
+    if 'file' not in request.files:
+        return "Dosya seçilmedi."
+
+    file = request.files['file']
+
+    if file.filename == '':
+        return "Dosya adı boş olamaz."
+
+    if file and allowed_file(file.filename):
+        timestamp = datetime.now().strftime('%Y%m%d%H%M%S')
+        filename = secure_filename(file.filename)
+        filename_with_timestamp = f"{os.path.splitext(filename)[0]}_{timestamp}{os.path.splitext(filename)[1]}"
+
+        # Dosya boyut kontrolü
+        if file.content_length > MAX_CONTENT_LENGTH:
+            return "Dosya boyutu çok büyük."
+
+        # DigitalOcean Spaces'e dosyayı yükle
+        file.seek(0)
+        s3.upload_fileobj(file, DO_SPACES_BUCKET_NAME, filename_with_timestamp)
+
+        return "Dosya başarıyla yüklendi."
+
+    else:
+        return "Desteklenmeyen dosya türü."
+
 if __name__ == '__main__':
     app.run(debug=True)
