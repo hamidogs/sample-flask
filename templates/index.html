@@ -111,10 +111,12 @@
                 success: function(response) {
                     console.log(response);
                     // Başarı durumunu işleyebilirsiniz, örneğin bir mesaj gösterebilirsiniz.
+                    alert("Dosyalar Yüklendi!");
                 },
                 error: function(error) {
                     console.error(error);
                     // Hata durumunu işleyebilirsiniz, örneğin bir hata mesajı gösterebilirsiniz.
+                    alert("Dosyalar Yüklenemedi!");
                 }
             });
         }
