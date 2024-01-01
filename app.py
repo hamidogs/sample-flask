@@ -119,7 +119,7 @@ def bildirim():
 # Twilio API bilgileri
 account_sid = 'AC4767a6e3fb1381b1112126b1ae132172'
 auth_token = 'c44d5a316d7a00e242ec8e76303666a9'
-whatsapp_from = 'whatsapp:+14155238886'
+whatsapp_from = 'whatsapp:+16154120609'
 whatsapp_to = 'whatsapp:+306975662416'
 
 # Twilio Client oluştur
