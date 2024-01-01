@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Page Title</title>
+
+    <!-- OneSignal Script -->
+    <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
+    <script>
+        window.OneSignalDeferred = window.OneSignalDeferred || [];
+        OneSignalDeferred.push(function(OneSignal) {
+            OneSignal.init({
+                appId: "5886c32a-0bf8-4251-bad6-84ef8fefc833",
+            });
+        });
+    </script>
+    <!-- End OneSignal Script -->
+</head>
+<body>
+    <!-- Your Page Content -->
+    <h1>Hoş Geldiniz!</h1>
+    <p>OneSignal ile yapılandırılmış bildirimlerle ilgili harika bir web deneyimi yaşayın.</p>
+    <!-- End Your Page Content -->
+</body>
+</html>

@@ -121,6 +121,9 @@ def get_presigned_url(bucket_name, object_key, expiration_time=3600):
         print(f'Hata oluştu: {e}')
         return None
 
+@app.route('/bildirim')
+def index():
+    return render_template('bildirim.html')
 
 if __name__ == '__main__':
     app.run(debug=True)
