@@ -109,7 +109,7 @@ def get_presigned_url(bucket_name, object_key, expiration_time=3600):
         return None
 
 @app.route('/bildirim')
-def index():
+def bildirim():
     return render_template('bildirim.html')
 
 
