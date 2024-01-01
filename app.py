@@ -7,19 +7,6 @@ from twilio.rest import Client
 
 app = Flask(__name__)
 
-
-account_sid = 'AC4767a6e3fb1381b1112126b1ae132172'
-auth_token = 'ad5f76272cab162bc9578d82b20cd6cd'
-client = Client(account_sid, auth_token)
-
-message = client.messages.create(
-    from_='whatsapp:+14155238886',
-    body='Dosyalar Yüklendi',
-    to='whatsapp:+306975662416'
-)
-
-print(message.sid)
-
 # DigitalOcean Spaces konfigürasyonu
 DO_SPACES_ACCESS_KEY = 'DO007MNNU87DAEDGHYM2'
 DO_SPACES_SECRET_KEY = 'MM1BquBArjjYY4+aN2jOvzK3E2NtaN7eMNEDJhhQjTc'
@@ -124,6 +111,38 @@ def get_presigned_url(bucket_name, object_key, expiration_time=3600):
 @app.route('/bildirim')
 def index():
     return render_template('bildirim.html')
+
+
+
+###############################TWILLO########################
+
+# Twilio API bilgileri
+account_sid = 'AC4767a6e3fb1381b1112126b1ae132172'
+auth_token = 'c44d5a316d7a00e242ec8e76303666a9'
+whatsapp_from = 'whatsapp:+16154120609'
+whatsapp_to = 'whatsapp:+306975662416'
+
+# Twilio Client oluştur
+client = Client(account_sid, auth_token)
+
+def send_whatsapp_message():
+    try:
+        # WhatsApp mesajını gönder
+        message = client.messages.create(
+            from_=whatsapp_from,
+            body='Deneme mesajı',
+            to=whatsapp_to
+        )
+
+        return jsonify({'status': 'success', 'message_sid': message.sid})
+    except Exception as e:
+        return jsonify({'status': 'error', 'error_message': str(e)})
+
+@app.route('/send-whatsapp-message', methods=['GET'])
+def trigger_whatsapp_message():
+    return send_whatsapp_message()
+
+################################################################################
 
 if __name__ == '__main__':
     app.run(debug=True)
